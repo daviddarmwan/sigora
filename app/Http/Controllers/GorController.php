@@ -1,0 +1,116 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Gor;
+use Illuminate\Http\Request;
+
+class GorController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $gor = Gor::all();
+        return view('gor.index', [
+            'gor' => $gor
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('gor.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama_gor' => 'required',
+            'jumlah_tempat' => 'required',
+            'alamat_gedung' => 'required',
+            'fasilitas' => 'required',
+            'kapasitas_penonton' => 'required',
+            'spesifikasi_gedung' => 'required',
+            'fungsi_gedung' => 'required',
+        ]);
+        $array = $request->only([
+            'nama_gor', 'jumlah_tempat', 'alamat_gedung', 'fasilitas', 'kapasitas_penonton', 'spesifikasi_gedung', 'fungsi_gedung'
+        ]);
+        $gor = Gor::create($array);
+        return redirect()->route('gor.index')
+            ->with('success_message', 'Berhasil menambah GOR baru');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $gor = Gor::find($id);
+        if (!$gor) return redirect()->route('gor.index')
+            ->with('error_message', 'GOR dengan id'.$id.' tidak ditemukan');
+        return view('gor.edit', [
+            'gor' => $gor
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        
+        $gor = Gor::find($id);
+        $gor->nama_gor = $request->nama_gor;
+        $gor->jumlah_tempat = $request->jumlah_tempat;
+        $gor->save();
+        return redirect()->route('gor.index')
+            ->with('success_message', 'Berhasil mengubah GOR');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $gor = Gor::find($id);
+        if ($gor) $gor->delete();
+        return redirect()->route('gor.index')
+            ->with('success_message', 'Berhasil menghapus GOR');
+    }
+}
