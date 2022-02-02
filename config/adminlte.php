@@ -235,6 +235,11 @@ return [
             'url'  => '/gor',
             'icon'  => 'fa fa-bicycle',
         ],
+        [
+            'text' => 'Request Ruang',
+            'url'  => '/request',
+            'icon'  => 'fa fa-home',
+        ],
     ],
 
     /*
